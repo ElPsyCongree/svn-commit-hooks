@@ -1,1 +1,10 @@
-This file was created by PyCharm 2.5 for binding GitHub repository
+Pre-commit hook written in Python for Subversion.
+
+Its goal is to keep the codebase free of illegal code.
+
+So far we have integrated the following items:
+
+1. Prevent test sources with instructions that pause the execution of a test such as TestBase.pause(): these are very harmful since the test jumping into this line of code blocks the whole TeamCity queue until the build times out.
+2. IntelliJ forms that use references to properties files: after obfuscating the code, they can’t be found at runtime
+
+Thanks to Pacific Knowledge Systems to allowing us to open-source this mini-project.
