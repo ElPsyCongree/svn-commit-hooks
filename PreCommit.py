@@ -48,27 +48,21 @@ class PreCommit():
         return None
 
     def main(self):
+        exitCode = 0
         svnCommand = SvnLookChangedCommand(self.repositoryPath, self.transaction)
         stdOutCapture = StdOutCapture(svnCommand.command())
         changedFiles = stdOutCapture.linesFromStdOut()
-
-        f = open('C:\\temp\\log.txt', 'w')
-
         for changedFile in changedFiles:
-            f.write("\nAbout to process: "  + changedFile)
             svnLookCatCommand = SvnLookCatCommand(self.repositoryPath, self.transaction, changedFile)
             cmd = svnLookCatCommand.command()
-            if cmd is None:
-                f.write('\nNone for ' + changedFile)
-                continue
-            f.write("\nCommand is: " + cmd)
-            stdOutCapture = StdOutCapture(cmd)
-            lines = stdOutCapture.linesFromStdOut()
-            result = self.checkFile(lines)
-            if result is not None:
-                sys.stderr.write(result + svnCommand.filePath)
-                return -1
-        return 0
+            if cmd is not None:
+                stdOutCapture = StdOutCapture(cmd)
+                lines = stdOutCapture.linesFromStdOut()
+                result = self.checkFile(lines)
+                if result is not None:
+                    sys.stderr.write("\n" + result + svnLookCatCommand.filePath)
+                    exitCode = -1
+        return exitCode
 
 if __name__ == '__main__':
     preCommit = PreCommit(sys.argv[1], sys.argv[2])

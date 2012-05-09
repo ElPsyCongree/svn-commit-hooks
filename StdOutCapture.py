@@ -8,10 +8,11 @@ class StdOutCapture:
 
     def linesFromStdOut(self):
         p = Popen(self.cmd, stdout=PIPE, stderr=PIPE)
-        stdout = p.communicate()
-        lines = []
-        if stdout is None:
-            pass
-        for line in stdout:
-            lines.append(line)
-        return lines
+        std_out = p.communicate()[0]
+        result = []
+        lines = std_out.splitlines()
+        for line in lines:
+            trimmed = line.strip()
+            if trimmed != "":
+                result.append(trimmed)
+        return result
