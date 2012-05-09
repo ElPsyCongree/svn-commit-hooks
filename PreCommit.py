@@ -52,11 +52,16 @@ class PreCommit():
         stdOutCapture = StdOutCapture(svnCommand.command())
         changedFiles = stdOutCapture.linesFromStdOut()
 
+        f = open('C:\\temp\\log.txt', 'w')
+
         for changedFile in changedFiles:
-            svnCommand = SvnLookCatCommand(self.repositoryPath, self.transaction, changedFile)
-            cmd = svnCommand.command()
+            f.write("\nAbout to process: "  + changedFile)
+            svnLookCatCommand = SvnLookCatCommand(self.repositoryPath, self.transaction, changedFile)
+            cmd = svnLookCatCommand.command()
             if cmd is None:
+                f.write('\nNone for ' + changedFile)
                 continue
+            f.write("\nCommand is: " + cmd)
             stdOutCapture = StdOutCapture(cmd)
             lines = stdOutCapture.linesFromStdOut()
             result = self.checkFile(lines)
