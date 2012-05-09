@@ -14,4 +14,4 @@ class StdOutCapture:
             pass
         for line in stdout:
             lines.append(line)
-        return stdout
+        return lines

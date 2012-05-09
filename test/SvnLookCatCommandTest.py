@@ -16,6 +16,15 @@ class MyTestCase(unittest.TestCase):
 
         self.assertEqual(expected, svnLook.command())
 
+    def test_commandForUpdatedFilesTrims(self):
+        transaction = 'ax8'
+        file = '  U   rippledown/trunk/src/rippledown/val/gui/CaseViewer.java'
+
+        svnLook = SvnLookCatCommand(REPOSITORIES_DEV, transaction, file)
+        expected = 'svnlook cat -t ax8 D:\BackedUp\csvn\data\\repositories\dev rippledown/trunk/src/rippledown/val/gui/CaseViewer.java'
+
+        self.assertEqual(expected, svnLook.command())
+
     def test_commandForPropertiesUpdatedFiles(self):
         transaction = 'ax8'
         file = 'UU   rippledown/trunk/src/rippledown/val/gui/CaseViewer.java'

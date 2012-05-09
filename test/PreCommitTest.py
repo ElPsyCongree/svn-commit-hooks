@@ -43,6 +43,14 @@ class MyTestCase(unittest.TestCase):
 
         self.assertEqual(PAUSE_IN_JAVA_FILE_MSG, actual)
 
+    def test_checkFileFailsForFunctionTestWithPause(self):
+        commit = PreCommit(None, None)
+        file = open('./resources/illegal-java-files/TutorialTextConditions.java', 'r')
+        javaClass = file.read().splitlines()
+        actual = commit.checkFile(javaClass)
+
+        self.assertEqual(PAUSE_IN_JAVA_FILE_MSG, actual)
+
     def test_checkFileFailsForTestBasePause(self):
         commit = PreCommit(None, None)
         file = open('./resources/illegal-java-files/AttributeWithTestBasePause.java', 'r')
