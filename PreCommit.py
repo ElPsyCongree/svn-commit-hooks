@@ -5,6 +5,7 @@ from SvnLookCatCommand import SvnLookCatCommand
 from SvnLookChangedCommand import SvnLookChangedCommand
 
 PAUSE_IN_JAVA_FILE_MSG = 'File contains: a pause: '
+ILLEGAL_IMPORT_MSG = 'File contains: an illegal import statement: '
 INTELLIJ_FORM_WITH_INVALID_REFERENCE_MSG = 'IntelliJ form references to a resource bundle: '
 
 __author__ = 'Fede Lopez'
@@ -36,6 +37,9 @@ class PreCommit():
             return True
         return False
 
+    def hasIllegalImportStatement(self, line):
+        return re.search(r"com\.sun\.istack\.internal", line) is not None
+
     def intelliJFormHasInvalidReference(self, line):
         return re.search(r"resource-bundle=\".+key=\"\w*\"", line) is not None
 
@@ -43,6 +47,8 @@ class PreCommit():
         for lineOfCode in fileAsString:
             if self.hasPause(lineOfCode):
                 return PAUSE_IN_JAVA_FILE_MSG
+            if self.hasIllegalImportStatement(lineOfCode):
+                return ILLEGAL_IMPORT_MSG
             if self.intelliJFormHasInvalidReference(lineOfCode):
                 return INTELLIJ_FORM_WITH_INVALID_REFERENCE_MSG
         return None

@@ -1,4 +1,4 @@
-from PreCommit import PreCommit, PAUSE_IN_JAVA_FILE_MSG, INTELLIJ_FORM_WITH_INVALID_REFERENCE_MSG
+from PreCommit import PreCommit, PAUSE_IN_JAVA_FILE_MSG, INTELLIJ_FORM_WITH_INVALID_REFERENCE_MSG, ILLEGAL_IMPORT_MSG
 
 __author__ = 'Fede Lopez'
 
@@ -82,6 +82,14 @@ class MyTestCase(unittest.TestCase):
         actual = commit.checkFile(javaClass)
 
         self.assertEqual(INTELLIJ_FORM_WITH_INVALID_REFERENCE_MSG, actual)
+
+    def test_checkIllegalImportsFails(self):
+        commit = PreCommit(None, None)
+        file = open('./resources/illegal-java-files/IllegalImport.java', 'r')
+        javaClass = file.read().splitlines()
+        actual = commit.checkFile(javaClass)
+
+        self.assertEqual(ILLEGAL_IMPORT_MSG, actual)
 
 if __name__ == '__main__':
     unittest.main()

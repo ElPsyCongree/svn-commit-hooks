@@ -69,13 +69,23 @@ class MyTestCase(unittest.TestCase):
 
         self.assertEqual(None, svnLook.command())
 
+    def test_commandIgnoresJpegFiles(self):
+        transaction = 'ax8'
+        file = 'A  rippledown/trunk/src/rippledown/help/val/CaseViewer.jpeg'
+
+        svnLook = SvnLookCatCommand(REPOSITORIES_DEV, transaction, file)
+
+        self.assertEqual(None, svnLook.command())
+
     def test_commandWithUpperCase(self):
         transaction = 'ax8'
         file = 'A  rippledown/trunk/src/rippledown/attribute/Attribute.java'
 
         svnLook = SvnLookCatCommand(REPOSITORIES_DEV, transaction, file)
 
-        self.assertEqual('svnlook cat -t ax8 D:\BackedUp\csvn\data\\repositories\dev rippledown/trunk/src/rippledown/attribute/Attribute.java', svnLook.command())
+        self.assertEqual(
+            'svnlook cat -t ax8 D:\BackedUp\csvn\data\\repositories\dev rippledown/trunk/src/rippledown/attribute/Attribute.java'
+            , svnLook.command())
 
     def test_commandForEmptyString(self):
         transaction = 'ax8'
