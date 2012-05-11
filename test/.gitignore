@@ -1,4 +1,2 @@
-# Ignore IntelliJ files
-.idea
 # Ignore Python compiled
 *.pyc
