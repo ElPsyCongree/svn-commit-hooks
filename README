@@ -6,5 +6,6 @@ So far we have integrated the following items:
 
 1. Prevent test sources with instructions that pause the execution of a test such as TestBase.pause(): these are very harmful since the test jumping into this line of code blocks the whole TeamCity queue until the build times out.
 2. IntelliJ forms that use references to property files
+3. Dart or JS test sources with instructions to execute only one test or test group, such as solo_test, solo_group (Dart) or ddescribe, iit (JS)
 
 Thanks to Pacific Knowledge Systems to allowing us to open-source this mini-project.

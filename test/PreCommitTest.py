@@ -1,8 +1,9 @@
-from PreCommit import PreCommit, PAUSE_IN_JAVA_FILE_MSG, INTELLIJ_FORM_WITH_INVALID_REFERENCE_MSG, ILLEGAL_IMPORT_MSG
+from PreCommit import PreCommit, PAUSE_IN_JAVA_FILE_MSG, INTELLIJ_FORM_WITH_INVALID_REFERENCE_MSG, ILLEGAL_IMPORT_MSG, SOLO_TEST_MSG
 
 __author__ = 'Fede Lopez'
 
 import unittest
+
 
 class MyTestCase(unittest.TestCase):
     def test_checkFile(self):
@@ -90,6 +91,49 @@ class MyTestCase(unittest.TestCase):
         actual = commit.checkFile(javaClass)
 
         self.assertEqual(ILLEGAL_IMPORT_MSG, actual)
+
+    def test_checkDartFile(self):
+        commit = PreCommit(None, None)
+        file = open('./resources/clean-dart-files/DartTest.dart', 'r')
+        actual = commit.checkFile(file.read().splitlines())
+
+        self.assertEqual(None, actual)
+
+    def test_checkIllegalSoloGroupDartFile(self):
+        commit = PreCommit(None, None)
+        file = open('./resources/illegal-dart-files/IllegalDartTest1.dart', 'r')
+        actual = commit.checkFile(file.read().splitlines())
+
+        self.assertEqual(SOLO_TEST_MSG, actual)
+
+    def test_checkIllegalSoloTestDartFile(self):
+        commit = PreCommit(None, None)
+        file = open('./resources/illegal-dart-files/IllegalDartTest2.dart', 'r')
+        actual = commit.checkFile(file.read().splitlines())
+
+        self.assertEqual(SOLO_TEST_MSG, actual)
+
+    def test_checkJSFile(self):
+        commit = PreCommit(None, None)
+        file = open('./resources/clean-js-files/jsSpec.js', 'r')
+        actual = commit.checkFile(file.read().splitlines())
+
+        self.assertEqual(None, actual)
+
+    def test_checkIllegalSoloGroupJSFile(self):
+        commit = PreCommit(None, None)
+        file = open('./resources/illegal-js-files/IllegalJsSpec1.js', 'r')
+        actual = commit.checkFile(file.read().splitlines())
+
+        self.assertEqual(SOLO_TEST_MSG, actual)
+
+    def test_checkIllegalSoloTestJSFile(self):
+        commit = PreCommit(None, None)
+        file = open('./resources/illegal-js-files/IllegalJsSpec2.js', 'r')
+        actual = commit.checkFile(file.read().splitlines())
+
+        self.assertEqual(SOLO_TEST_MSG, actual)
+
 
 if __name__ == '__main__':
     unittest.main()
