@@ -17,5 +17,5 @@ class SvnLookCatCommand:
         return self.filePath.startswith('U ') or self.filePath.startswith('UU ')  or self.filePath.startswith('A ')
 
     def acceptFile(self):
-        accepted = (".JAVA", ".FORM")
+        accepted = (".JAVA", ".FORM", ".JS", ".DART")
         return self.filePath.upper().endswith(accepted)

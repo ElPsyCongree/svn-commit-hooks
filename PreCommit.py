@@ -4,9 +4,10 @@ from StdOutCapture import StdOutCapture
 from SvnLookCatCommand import SvnLookCatCommand
 from SvnLookChangedCommand import SvnLookChangedCommand
 
-PAUSE_IN_JAVA_FILE_MSG = 'File contains: a pause: '
+PAUSE_IN_JAVA_FILE_MSG = 'File contains: a pause or stop: '
 ILLEGAL_IMPORT_MSG = 'File contains: an illegal import statement: '
 INTELLIJ_FORM_WITH_INVALID_REFERENCE_MSG = 'IntelliJ form references to a resource bundle: '
+SOLO_TEST_MSG = 'File contains solo test, solo group, ddescribe, or iit: '
 
 __author__ = 'Fede Lopez'
 
@@ -22,8 +23,15 @@ class PreCommit():
         return re.search(r"/\*.+\b(TestSetup|TestBase)\.\bpause\(\).+\*/", line) is not None
 
     def pauseInLine(self, line):
-        pauseInstruction = ('TestSetup.pause()', 'TestBase.pause()')
+        pauseInstruction = ('TestSetup.pause()', 'TestBase.pause()', 'Waiting.stop()')
         for instruction in pauseInstruction:
+            if instruction in line:
+                return True
+        return False
+
+    def hasSoloTestInLine(self, line):
+        soloInstruction = ('solo_test', 'solo_group', 'ddescribe', 'iit(')
+        for instruction in soloInstruction:
             if instruction in line:
                 return True
         return False
@@ -47,6 +55,8 @@ class PreCommit():
         for lineOfCode in fileAsString:
             if self.hasPause(lineOfCode):
                 return PAUSE_IN_JAVA_FILE_MSG
+            if self.hasSoloTestInLine(lineOfCode):
+                return SOLO_TEST_MSG
             if self.hasIllegalImportStatement(lineOfCode):
                 return ILLEGAL_IMPORT_MSG
             if self.intelliJFormHasInvalidReference(lineOfCode):
